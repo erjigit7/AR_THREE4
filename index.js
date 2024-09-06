@@ -21,6 +21,34 @@ function main() {
 
     requestAnimationFrame(render);
 
+    const rotationStep = THREE.Math.degToRad(2);
+
+    let mousedown = false, lastX =0;
+
+    window.addEventListener("mousedown", e=> {
+        mousedown = true;
+    });
+
+    window.addEventListener("mouseup", e=> {
+        mousedown = false;
+    });
+
+    window.addEventListener("mousemove", e=> {
+        if(!mousedown) return;
+        if(e.clientX < lastX) {
+            camera.rotation.y -= rotationStep;
+            if(camera.rotation.y < 0) {
+                camera.rotation.y += 2 * Math.PI;
+            }
+        } else if (e.clientX > lastX) {
+            camera.rotation.y += rotationStep;
+            if(camera.rotation.y > 2 * Math.PI) {
+                camera.rotation.y -= 2 * Math.PI;
+            }
+        }
+        lastX = e.clientX;
+    });
+
     function render() {
         if(canvas.width != canvas.clientWidth || canvas.height != canvas.clientHeight) {
             renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
